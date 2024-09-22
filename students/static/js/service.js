@@ -1,5 +1,7 @@
+const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
 const searchStudentById = (studentId, callback) => {
-  fetch(`/get_student/${studentId}`, {
+  fetch(`/home/get_student/${studentId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -17,9 +19,8 @@ const searchStudentById = (studentId, callback) => {
 };
 
 const deleteStudent = (studentId) => {
-  const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
-  fetch(`/delete_student/${studentId}/`, {
+  fetch(`/home/delete_student/${studentId}/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -67,10 +68,9 @@ const submitUpdate = () => {
   const gender = document.getElementById("update_gender").value;
   const grade = document.getElementById("update_grade").value;
   const score = document.getElementById("update_score").value;
-  const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
   // Send AJAX request to update the student
-  fetch(`/update_student/${studentId}/`, {
+  fetch(`/home/update_student/${studentId}/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -115,3 +115,29 @@ window.onclick = function (event) {
     modal.style.display = "none";
   }
 };
+
+
+//Handle Logout
+const logout= ()=> {
+  
+  fetch('/user/logout/', {
+      method: 'POST',  
+      headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken 
+      }
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.message === 'Successfully logged out') {
+          window.location.href = '/user/login';  // Redirect to the login page
+      }
+  })
+  .catch(error => console.error('Error:', error));
+}
+
+//Handle Register
+const register= ()=> {
+  
+  window.location.href = '/user/register';
+}

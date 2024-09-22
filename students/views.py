@@ -3,7 +3,6 @@ import datetime
 import random
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from bson.objectid import ObjectId
 
 from .models import student_collection
 
@@ -67,6 +66,9 @@ def get_student_by_id(request, student_id):
 
 # Display all students
 def get_all_student(request):
+    if 'user_id' not in request.session:
+        return redirect('/user/login')  # Redirect to the login page if not logged in
+    
     students = student_collection.find()
     
     # Convert MongoDB cursor to list for rendering in template

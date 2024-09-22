@@ -10,6 +10,8 @@
     <script src="{% static 'js/service.js' %}" defer></script>
 </head>
 <body>
+    <button onclick="logout()">Logout</button>
+    <button onclick="register()">Register</button>
     <h1>List of Students</h1>
     <ul>
 
@@ -42,10 +44,12 @@
                         <td>{{ student.gender }}</td>
                         <td>{{ student.grade }}</td>
                         <td>{{ student.score }}</td>
+                        {% if request.session.is_admin %}
                         <td>
                             <button onclick="deleteStudent('{{student.id}}')">Delete</button>
                             <button onclick="showUpdateModal('{{student.id}}')">Update</button>
                         </td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>
