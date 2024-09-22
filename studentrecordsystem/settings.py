@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'person',
+    'students',
 ]
 
 CORS_ORIGIN_ALL_ALL=True
