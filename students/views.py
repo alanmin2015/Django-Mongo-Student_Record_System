@@ -77,7 +77,7 @@ def get_all_student(request):
         student['id'] = str(student['_id'])  # Convert ObjectId to string
         student_list.append(student)
     
-    return render(request, 'student_list.html', {'students': student_list})
+    return render(request, 'studentList.html', {'students': student_list})
 
 
 # Delete a student

@@ -136,8 +136,3 @@ const logout= ()=> {
   .catch(error => console.error('Error:', error));
 }
 
-//Handle Register
-const register= ()=> {
-  
-  window.location.href = '/user/register';
-}

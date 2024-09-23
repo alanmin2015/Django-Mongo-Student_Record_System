@@ -65,13 +65,17 @@ def login_view(request):
             request.session['is_superuser']=user.get('is_superuser', False)
 
             #Add login timestamp
-            last_login_time=datetime.datetime.now().date()
+            last_login_time = datetime.datetime.now()
             user_collection.update_one(
                 {'_id': user['_id']},
                 {'$set': {'last_login':last_login_time}}
             )
 
-            return redirect('/home/get_all_student')
+            #Different user account will direct to different page
+            if user.get('is_superuser',False):
+                return redirect('/admin/userlist')
+            else:
+                return redirect('/home/get_all_student')
         else:
             messages.error(request, 'Invalid email or password.')
 

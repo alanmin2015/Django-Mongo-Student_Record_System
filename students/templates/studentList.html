@@ -7,11 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Students Record List</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <script src="{% static 'js/service.js' %}" defer></script>
+    <script src="{% static 'js/studentService.js' %}" defer></script>
 </head>
 <body>
     <button onclick="logout()">Logout</button>
-    <button onclick="register()">Register</button>
     <h1>List of Students</h1>
     <ul>
 
@@ -87,6 +86,6 @@
         <button type="submit">Add Student</button>
     </form>
 
-    {% include 'modal.html' %}
+    {% include 'updateStudentModel.html' %}
 </body>
 </html>
