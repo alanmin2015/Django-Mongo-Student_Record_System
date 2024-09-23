@@ -1,22 +1,61 @@
 const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
+// const searchStudentById = (studentId, callback) => {
+//   console.log('studentId',studentId)
+//   fetch(`/home/get_student/${studentId}`, {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   })
+//     .then((response) => response.json())
+//     .then((data) => {
+//       if (data.status == "success") {
+//         console.log('data.student',data.student)
+//         callback(data.student);
+//       } else {
+//         alert("Failed to fetch student data");
+//       }
+//     })
+//     .catch((error) => console.error("Error", error));
+// };
 const searchStudentById = (studentId, callback) => {
+  console.log('Searching for student with ID:', studentId);
+
   fetch(`/home/get_student/${studentId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      console.log('Raw response:', response);  // Log the raw response
+
+      // Check if the response is okay (status code 200-299)
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // Parse the response as JSON
+      return response.json();
+    })
     .then((data) => {
-      if (data.status == "success") {
+      console.log('Parsed data:', data);  // Log the parsed JSON data
+
+      if (data.status === "success") {
+        console.log('Student data:', data.student);  // Log the student data
         callback(data.student);
       } else {
-        alert("Failed to fetch student data");
+        alert("Failed to fetch student data: " + data.message);
       }
     })
-    .catch((error) => console.error("Error", error));
+    .catch((error) => {
+      // Log any errors encountered during the fetch or response handling
+      console.error('Fetch error:', error);
+      alert("An error occurred while fetching student data. Please try again.");
+    });
 };
+
 
 const deleteStudent = (studentId) => {
 
@@ -39,7 +78,9 @@ const deleteStudent = (studentId) => {
 
 // Function to show the update modal
 const showUpdateModal = (student) => {
+  console.log('student',student)
   searchStudentById(student, (student) => {
+    console.log(2)
     // Show the modal
     const modal = document.getElementById("updateModal");
     modal.style.display = "block";
@@ -62,45 +103,31 @@ const closeUpdateModal = () => {
 
 // Function to submit the updated student info
 const submitUpdate = () => {
-  const studentId = document.getElementById("student_id").value;
-  const firstName = document.getElementById("update_first_name").value;
-  const lastName = document.getElementById("update_last_name").value;
-  const gender = document.getElementById("update_gender").value;
-  const grade = document.getElementById("update_grade").value;
-  const score = document.getElementById("update_score").value;
+  const formData = new FormData(document.getElementById("updateForm"));
+  
 
-  // Send AJAX request to update the student
-  fetch(`/home/update_student/${studentId}/`, {
+  fetch(`/home/update_student/${formData.get("student_id")}/`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": csrfToken,
+      "X-CSRFToken": csrfToken, 
     },
-    body: JSON.stringify({
-      first_name: firstName,
-      last_name: lastName,
-      gender: gender,
-      grade: grade,
-      score: score,
-    }),
+    body: formData,
   })
     .then((response) => {
       if (response.ok) {
-        // Close the modal
         closeUpdateModal();
-
-        // Update the student in the DOM
-        const studentElement = document.getElementById(`${studentId}`);
-        studentElement.innerHTML = ` <td>${studentId}</td>
-        <td>${firstName}</td>
-        <td>${lastName}</td>
-        <td>${gender}</td>
-        <td>${grade}</td>
-        <td>${score}</td>
-        <td>
-            <button onclick="deleteStudent('${studentId}')">Delete</button>
-            <button onclick="showUpdateModal('${studentId}')">Update</button>
-        </td>`;
+        const studentElement = document.getElementById(`${formData.get("student_id")}`);
+        studentElement.innerHTML = `
+          <td>${formData.get("student_id")}</td>
+          <td>${formData.get("first_name")}</td>
+          <td>${formData.get("last_name")}</td>
+          <td>${formData.get("gender")}</td>
+          <td>${formData.get("grade")}</td>
+          <td>${formData.get("score")}</td>
+          <td>
+            <button onclick="deleteStudent('${formData.get("student_id")}')">Delete</button>
+            <button onclick="showUpdateModal('${formData.get("student_id")}')">Update</button>
+          </td>`;
       } else {
         alert("Failed to update student.");
       }
@@ -136,3 +163,7 @@ const logout= ()=> {
   .catch(error => console.error('Error:', error));
 }
 
+// Redirect to the student detail page
+function viewStudentDetail(studentId) {
+  window.location.href = `/home/detail/${studentId}/`;
+}

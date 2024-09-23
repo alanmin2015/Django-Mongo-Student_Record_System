@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load base64_filters %}
+
+
+{% block title %}Student Details{% endblock %}
+
+{% block content %}
+    <h1>Student Detail</h1>
+    <p><strong>First Name:</strong> {{ student.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ student.last_name }}</p>
+    <p><strong>Gender:</strong> {{ student.gender }}</p>
+    <p><strong>Grade:</strong> {{ student.grade }}</p>
+    <p><strong>Score:</strong> {{ student.score }}</p>
+
+    {% if student.photo %}
+        <h2>Photo</h2>
+        <img src="data:image/jpeg;base64,{{ photo_data|b64encode }}" alt="Student Photo">
+    {% else %}
+        <p>No photo available</p>
+    {% endif %}
+
+    <a href="/students/">Back to Student List</a>
+{% endblock %}

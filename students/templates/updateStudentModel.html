@@ -2,9 +2,10 @@
     <div class="modal-content">
         <span class="close" onclick="closeUpdateModal()">&times;</span>
         <h2>Update Student</h2>
-        <form id="updateForm">
+        <form id="updateForm" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="hidden" id="student_id">
+            <input type="hidden" id="student_id" name="student_id">
+            
             <label for="update_first_name">First Name:</label>
             <input type="text" id="update_first_name" name="first_name" required><br><br>
 
@@ -12,24 +13,25 @@
             <input type="text" id="update_last_name" name="last_name" required><br><br>
 
             <label for="update_gender">Gender:</label>
-            <select id="update_gender" name="ender" required>
+            <select id="update_gender" name="gender" required>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="X">X</option>
-            </select>
-    
+            </select><br><br>
+
             <label for="update_grade">Grade:</label>
             <select id="update_grade" name="grade" required>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
-            </select>
-    
-            <label for="update_score">Score:</label>
-            <input type="update_score" id="update_score" name="score"><br><br>
+            </select><br><br>
 
-            
+            <label for="update_score">Score:</label>
+            <input type="text" id="update_score" name="score"><br><br>
+
+            <!-- <label for="update_photo">Upload Photo:</label>
+            <input type="file" id="update_photo" name="photo"><br><br> -->
 
             <button type="button" onclick="submitUpdate()">Update Student</button>
         </form>

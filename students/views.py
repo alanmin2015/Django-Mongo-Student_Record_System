@@ -3,9 +3,10 @@ import datetime
 import random
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-
+import gridfs
 from .models import student_collection
-
+from bson import ObjectId
+from db_connection import db
 #Function to generate the student ID based on current date and a random 3-digit number
 def generate_student_id():
     today_date_str=datetime.datetime.now().strftime("%y%m%d")
@@ -58,6 +59,9 @@ def get_student_by_id(request, student_id):
         if student:
             # Convert MongoDB ObjectId to string and return student data
             student['_id'] = str(student['_id'])
+        if 'photo' in student and isinstance(student['photo'], ObjectId):
+            student['photo'] = str(student['photo'])
+
             return JsonResponse({'status': 'success', 'student': student})
         else:
             return JsonResponse({'status': 'error', 'message': 'Student not found'}, status=404)
@@ -90,26 +94,53 @@ def delete_student(request, student_id):
 def update_student(request, student_id):
 
     if request.method=='POST':
-        data = json.loads(request.body)
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        gender = request.POST.get('gender')
+        grade = request.POST.get('grade')
+        score = request.POST.get('score')
 
-        # Extract first_name and last_name from the parsed JSON
-        first_name = data.get('first_name')
-        last_name = data.get('last_name')
-        gender = data.get('gender')
-        grade = data.get('grade')
-        score = data.get('score')
+        student_data={
+            'first_name': first_name,
+            'last_name':last_name,
+            'gender':gender,
+            'grade':grade,
+            'score':score,
+            }
+
+        print('student_data',student_data)
+    #Upload photo
+    if 'photo' in request.FILES:
+        fs = gridfs.GridFS(db)
+        photo=request.FILES['photo']
+        photo_id=fs.put(photo, filename=photo.name)
+
+        student_data['photo']=photo_id
 
         student_collection.update_one(
         {'_id': student_id},
-        {'$set':{'first_name': first_name,
-                 'last_name':last_name,
-                 'gender':gender,
-                 'grade':grade,
-                 'score':score,
-                 }}
+        {'$set':student_data}
         )
+        
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+
+def student_detail(request,student_id):
+    student=student_collection.find_one({'_id': student_id})
+
+    if student:
+        if 'photo' in student and isinstance(student['photo'], ObjectId):
+            student['photo']=str(student['photo'])
+        
+        fs=gridfs.GridFS(student_collection.database)
+        photo_data=None
+        if student.get('photo'):
+            photo_id=ObjectId(student['photo'])
+            photo_data=fs.get(photo_id).read()
+
+        return render(request, 'studentDetail.html', {'student': student, 'photo_data': photo_data})
+    else:
+        return render(request, '404.html')
 
 
 
