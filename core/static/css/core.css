@@ -131,7 +131,7 @@ body {
     padding: 0;
     margin-top: 20px;
     color: #ff3b30;
-    font-size: 50px;
+    font-size: 20px;
 }
 
 /* Responsive styling */
@@ -201,7 +201,7 @@ body {
 }
 
 /* Register button */
-.register-container button {
+.registerbutton {
     width: 100%;
     padding: 15px;
     font-size: 16px;
@@ -217,10 +217,30 @@ body {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.register-container button:hover {
+.registerbutton:hover {
     background-color: #1976d2;
     box-shadow: 0 8px 16px rgba(25, 118, 210, 0.3);
 }
+
+.gobackbutton {
+    background-color: #e74c3c; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 20vw; 
+    text-align: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    float: right; 
+}
+
+.gobackbutton:hover {
+    background-color: #c0392b; /* Darker red on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 
 /* Responsive styling */
 @media only screen and (max-width: 768px) {

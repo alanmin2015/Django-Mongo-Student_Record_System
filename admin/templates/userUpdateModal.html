@@ -1,0 +1,35 @@
+<div id="updateModal" class="modal">
+  <div class="modal-content">
+    <span onclick="closeUpdateModal()" class="close">&times;</span>
+    <h2>Update User</h2>
+    <form id="updateUserForm">
+      <input type="hidden" id="update_user_id">
+
+      <p>Email: <span id="update_email"></span></p>
+
+      <label for="update_password">Password (leave blank to keep current):</label>
+      <input type="password" id="update_password">
+
+      <label for="confirm_password">Confirm Password:</label>
+      <input type="password" id="confirm_password" name="confirm_password" required><br><br>
+
+       <div class="checkbox-container">
+        <label for="update_is_admin">Is Admin:</label>
+        <input type="checkbox" id="update_is_admin">
+      </div>
+
+      <div class="checkbox-container">
+        <label for="update_is_superuser">Is Superuser:</label>
+        <input type="checkbox" id="update_is_superuser">
+      </div>
+
+   
+      <div class="button-container">
+        <button type="button" class="updateButton" onclick="submitUpdate()">Update User</button>
+        <button type="button" class="cancelButton" onclick="closeUpdateModal()">Cancel</button>
+      </div>
+
+      <div id="error_message"></div>
+    </form>
+  </div>
+</div>

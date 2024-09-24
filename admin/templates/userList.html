@@ -1,21 +1,17 @@
+{% extends 'base.html' %}
+
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block extra_head %}
     <meta name="csrf-token" content="{{ csrf_token }}">
-    <script src="{% static 'js/userService.js' %}" defer></script>
-    <title>User List</title>
-</head>
-<body>
-    {% csrf_token %}
-    <button onclick="logout()">Logout</button>
-    <button onclick="register()">Register</button>
-    <a href="/home/get_all_student" class="btn btn-primary">Go to Student List</a>
-    <h1>List of Users</h1>
-    <ul>
+    <link rel="stylesheet" href="{% static 'css/user.css' %}">
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+    <div class="user-list-container">
+        <h1>List of Users</h1>
+        <ul>
             <table>
                 <thead>
                     <tr>
@@ -35,12 +31,12 @@
                         <td>{{ user.last_login }}</td>
                         {% if request.session.is_superuser %}
                         <td>
-                            <button onclick="deleteUser('{{user.id}}')">Delete</button>
+                            <button onclick="showDeleteModal('{{user.id}}')">Delete</button>
                             <button onclick="showUpdateModal({
                                 id: '{{ user.id }}',
                                 email: '{{ user.email }}',
                                 is_admin: '{{ user.is_admin }}',
-                                is_superuser: '{{ user.is_superuser}}'
+                                is_superuser: '{{ user.is_superuser }}'
                             })">Update</button>
                         </td>
                         {% endif %}
@@ -48,8 +44,13 @@
                     {% endfor %}
                 </tbody>
             </table>
-    </ul>
-    {% include 'userUpdateModel.html' %}
+        </ul>
+        {% include 'userUpdateModal.html' %}
+        {% include 'userDeleteModal.html' %}
+    </div>
 
-</body>
-</html>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/userService.js' %}"></script>
+{% endblock %}

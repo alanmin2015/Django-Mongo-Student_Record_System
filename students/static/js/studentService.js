@@ -1,24 +1,5 @@
 const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
-// const searchStudentById = (studentId, callback) => {
-//   console.log('studentId',studentId)
-//   fetch(`/home/get_student/${studentId}`, {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       if (data.status == "success") {
-//         console.log('data.student',data.student)
-//         callback(data.student);
-//       } else {
-//         alert("Failed to fetch student data");
-//       }
-//     })
-//     .catch((error) => console.error("Error", error));
-// };
 const searchStudentById = (studentId, callback) => {
   console.log('Searching for student with ID:', studentId);
 

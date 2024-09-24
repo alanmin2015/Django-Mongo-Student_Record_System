@@ -1,26 +1,72 @@
 const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
-const deleteUser = (userId) => {
-  fetch(`/admin/delete_user/${userId}/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": csrfToken
-    },
-  })
-    .then((response) => {
-      if (response.ok) {
-        document.getElementById(`${userId}`).remove();
-      } else {
-        alert("Failed to delete user");
+// const deleteUser = (userId) => {
+//   fetch(`/admin/delete_user/${userId}/`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "X-CSRFToken": csrfToken
+//     },
+//   })
+//     .then((response) => {
+//       if (response.ok) {
+//         document.getElementById(`${userId}`).remove();
+//       } else {
+//         alert("Failed to delete user");
+//       }
+//     })
+//     .catch((error) => console.error("Error: ", error));
+// };
+
+let userIdToDelete = null; // Store the user ID for deletion
+
+// Function to show the delete confirmation modal
+const showDeleteModal = (userId) => {
+  userIdToDelete = userId; // Store the user ID to delete
+  const modal = document.getElementById('deleteModal');
+  modal.style.display = 'block'; // Show the modal
+};
+
+// Function to close the delete confirmation modal
+const closeDeleteModal = () => {
+  const modal = document.getElementById('deleteModal');
+  modal.style.display = 'none'; // Hide the modal
+  userIdToDelete = null; // Reset the user ID
+};
+
+// Function to confirm deletion and send the request
+const confirmDelete = () => {
+  if (userIdToDelete) {
+    fetch(`/admin/delete_user/${userIdToDelete}/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrfToken
       }
     })
-    .catch((error) => console.error("Error: ", error));
+      .then((response) => {
+        if (response.ok) {
+          document.getElementById(userIdToDelete).remove(); // Remove the user row from the table
+          closeDeleteModal(); // Close the modal
+        } else {
+          alert("Failed to delete user");
+        }
+      })
+      .catch((error) => console.error("Error:", error));
+  }
 };
+
+// Event listener to close the modal when clicking outside the modal content
+window.onclick = function (event) {
+  const modal = document.getElementById("deleteModal");
+  if (event.target === modal) {
+    closeDeleteModal();
+  }
+};
+
 
 // Function to show the update modal
 const showUpdateModal = (user) => {
-  console.log('user',user)
   document.getElementById('update_user_id').value = user.id;
   document.getElementById('update_email').innerText = user.email;
   document.getElementById('update_password').value = '';
@@ -83,26 +129,5 @@ window.onclick = function (event) {
 };
 
 
-//Handle Logout
-const logout= ()=> {
-  
-  fetch('/user/logout/', {
-      method: 'POST',  
-      headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken 
-      }
-  })
-  .then(response => response.json())
-  .then(data => {
-      if (data.message === 'Successfully logged out') {
-          window.location.href = '/user/login';  // Redirect to the login page
-      }
-  })
-  .catch(error => console.error('Error:', error));
-}
 
-//Handle Register
-const register= ()=> {
-  window.location.href = '/user/register';
-}
+

@@ -28,7 +28,7 @@
             <label for="confirm_password">Confirm Password:</label>
             <input type="password" id="confirm_password" name="confirm_password" required>
 
-            {% if request.user.is_authenticated and request.user.is_superuser %}
+            {% if request.session.is_superuser %}
                 <label for="is_admin">Admin: </label>
                 <input type="checkbox" id="is_admin" name="is_admin"><br><br>
 
@@ -36,7 +36,7 @@
                 <input type="checkbox" id="is_superuser" name="is_superuser"><br><br>
             {% endif %}
 
-            <button type="submit">Register</button>
+            <button type="submit" class="registerbutton">Register</button>
         </form>
 
         {% if messages %}
@@ -48,6 +48,10 @@
         {% endif %}
 
         <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+    
+        {% if request.session.is_superuser %}
+        <button type="button" class="gobackbutton" onclick="location.href='/admin/userlist/'">Go Back</button>
+        {% endif %}
     </div>
 </body>
 </html>

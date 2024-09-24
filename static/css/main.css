@@ -1,0 +1,91 @@
+/* General body styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Header Navigation */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #264653; /* Dark Blue */
+    color: white;
+}
+
+/* Title and Home button on the left */
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.site-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 80px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    margin-right: 25px;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #e9c46a; /* Light Yellow */
+}
+
+/* Register and Logout buttons on the right */
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+.nav-btn {
+    background-color: #e76f51; /* Coral Color */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-right: 20px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nav-btn:hover {
+    background-color: #f4a261; /* Lighter Coral */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo-image{
+    width: 10%;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #264653;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .nav-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .nav-right {
+        margin-top: 10px;
+    }
+}
