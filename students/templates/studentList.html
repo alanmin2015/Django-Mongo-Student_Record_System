@@ -1,92 +1,72 @@
+{% extends 'base.html' %}
+
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Students Record List</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/student.css' %}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <script src="{% static 'js/studentService.js' %}" defer></script>
-</head>
-<body>
-    <button onclick="logout()">Logout</button>
-    <h1>List of Students</h1>
-    <ul>
+{% endblock %}
 
-            <!-- <li  id="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}
-                <button onclick="deleteStudent('{{student.id}}')">Delete</button>
-                <button onclick="showUpdateModal({
-                    id:'{{student.id}}',
-                    firstName: '{{student.first_name}}',
-                    lastName:'{{student.last_name}}'
-                })">Update</button>
-            </li> -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>Student ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Gender</th>
-                        <th>Grade</th>
-                        <th>Score</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for student in students %}
-                    <tr id="{{ student.id }}">
-                        <td>{{ student.id }}</td>
-                        <td>{{ student.first_name }}</td>
-                        <td>{{ student.last_name }}</td>
-                        <td>{{ student.gender }}</td>
-                        <td>{{ student.grade }}</td>
-                        <td>{{ student.score }}</td>
-                        {% if request.session.is_admin %}
-                        <td>
-                            <button onclick="deleteStudent('{{student.id}}')">Delete</button>
-                            <button onclick="showUpdateModal('{{student.id}}')">Update</button>
-                            <button onclick="viewStudentDetail('{{student.id}}')">Detail</button> 
-                        </td>
+{% block content %}
+    <div class="student-list-container">
+        <div class="table-responsive">
+        <div class="header-with-button">
+            <h1>List of Students</h1>
+            {% if request.session.is_admin or request.session.is_superuser %}
+            <button class="addStudentButton" onclick="showAddStudentModal()">Add Student</button>
+            {% endif %}
+        </div>
+
+        <table id="studentTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0, 'int')">Student ID<span class="sort-icon asc">▲</span><span class="sort-icon desc">▼</span></th>
+                    <th onclick="sortTable(1, 'string')">First Name<span class="sort-icon asc">▲</span><span class="sort-icon desc">▼</span></th>
+                    <th onclick="sortTable(2, 'string')">Last Name<span class="sort-icon asc">▲</span><span class="sort-icon desc">▼</span></th>
+                    <th onclick="sortTable(3, 'string')">Gender<span class="sort-icon asc">▲</span><span class="sort-icon desc">▼</span></th>
+                    <th onclick="sortTable(4, 'int')">Grade<span class="sort-icon asc">▲</span><span class="sort-icon desc">▼</span></th>
+                    <th onclick="sortTable(5, 'float')">Score<span class="sort-icon asc">▲</span><span class="sort-icon desc">▼</span></th>        
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr id="{{ student.id }}">
+                    <td>{{ student.id }}</td>
+                    <td>{{ student.first_name }}</td>
+                    <td>{{ student.last_name }}</td>
+                    <td>{{ student.gender }}</td>
+                    <td>{{ student.grade }}</td>
+                    <td>{{ student.score }}</td>
+    
+    <td>                {% if request.session.is_admin or request.session.is_superuser %}
+                        <button onclick="showDeleteModal('{{ student.id }}')">Delete</button>
+                        <button onclick="showUpdateModal('{{ student.id }}')">Update</button>
                         {% endif %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                        <button onclick="viewStudentDetail('{{ student.id }}')">Detail</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div id="pagination-controls" class="pagination-controls"></div>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+        </div>
+        </div>
 
-    </ul>
-
-    <h2>Add a New Student</h2>
-    <form method="POST" action="{% url 'add_student' %}">
-        {% csrf_token %}
-        <label for="first_name">First Name:</label>
-        <input type="text" id="first_name" name="first_name" required><br><br>
-
-        <label for="last_name">Last Name:</label>
-        <input type="text" id="last_name" name="last_name" required><br><br>
-
-        <label for="gender">Gender:</label>
-        <select id="gender" name="gender" required>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="X">X</option>
-        </select>
-
-        <label for="grade">Grade:</label>
-        <select id="grade" name="grade" required>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-        </select>
-
-        <label for="score">Score:</label>
-        <input type="score" id="score" name="score"><br><br>
-
-        <button type="submit">Add Student</button>
-    </form>
-
+    {% include 'addStudentModal.html' %} 
     {% include 'updateStudentModal.html' %}
-</body>
-</html>
+    {% include 'deleteStudentModal.html' %}
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/studentService.js' %}"></script>
+    <script src="{% static 'js/tableUtil.js' %}"></script>
+{% endblock %}

@@ -1,4 +1,4 @@
-// const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
 //Handle Logout
 const logout= ()=> {
@@ -13,7 +13,7 @@ const logout= ()=> {
     .then(response => response.json())
     .then(data => {
         if (data.message === 'Successfully logged out') {
-            window.location.href = '/user/login';  // Redirect to the login page
+            window.location.href = '/user/login';  
         }
     })
     .catch(error => console.error('Error:', error));

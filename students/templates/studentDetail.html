@@ -1,23 +1,46 @@
 {% extends 'base.html' %}
 {% load base64_filters %}
+{% load static %}
 
-
-{% block title %}Student Details{% endblock %}
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/student.css' %}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <script src="{% static 'js/studentService.js' %}" defer></script>
+{% endblock %}
 
 {% block content %}
-    <h1>Student Detail</h1>
-    <p><strong>First Name:</strong> {{ student.first_name }}</p>
-    <p><strong>Last Name:</strong> {{ student.last_name }}</p>
-    <p><strong>Gender:</strong> {{ student.gender }}</p>
-    <p><strong>Grade:</strong> {{ student.grade }}</p>
-    <p><strong>Score:</strong> {{ student.score }}</p>
+{% csrf_token %}
+    <div class="student-detail-container">
+        <div class="student-details">
+            <div class="student-detail-text">
+                <p><strong>Student ID:</strong> {{ student.id }}</p>
+                <p><strong>First Name:</strong> {{ student.first_name }}</p>
+                <p><strong>Last Name:</strong> {{ student.last_name }}</p>
+                <p><strong>Gender:</strong> {{ student.gender }}</p>
+                <p><strong>Grade:</strong> {{ student.grade }}</p>
+                <p><strong>Score:</strong> {{ student.score }}</p>
+            </div>
 
-    {% if student.photo %}
-        <h2>Photo</h2>
-        <img src="data:image/jpeg;base64,{{ photo_data|b64encode }}" alt="Student Photo">
-    {% else %}
-        <p>No photo available</p>
-    {% endif %}
+            {% if student.photo %}
+                <img class="student-photo" src="data:image/jpeg;base64,{{ photo_data|b64encode }}" alt="Student Photo">
+            {% else %}
+                <p>No photo available</p>
+            {% endif %}
+        </div>
 
-    <a href="/students/">Back to Student List</a>
+        <div class="button-container">
+            <button class="back-button" onclick="location.href='/home/get_all_student/'">Back</button>
+            {% if request.session.is_admin or request.session.is_superuser %}
+            <button class="update-button" onclick="showUpdateModal('{{ student.id }}')">Update</button>
+            {% endif %}
+        </div>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    {% include 'updateStudentModal.html' %}
 {% endblock %}

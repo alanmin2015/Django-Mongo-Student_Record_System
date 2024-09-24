@@ -10,7 +10,6 @@ body {
     align-items: center;
 }
 
-/* Container for the login form */
 .login-container {
     background-color: #fff;
     padding: 100px;
@@ -21,7 +20,6 @@ body {
     max-width: 100%;
 }
 
-/* Welcome message */
 .welcome-message h1 {
     font-size: 32px;
     font-weight: 600;
@@ -30,7 +28,6 @@ body {
     text-align: center;
 }
 
-/* Form labels */
 .login-container label {
     display: block;
     font-size: 14px;
@@ -40,7 +37,6 @@ body {
     margin-bottom: 10px;
 }
 
-/* Input fields */
 .login-container input[type="email"],
 .login-container input[type="password"] {
     width: 100%;
@@ -53,7 +49,6 @@ body {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Fancy focus effect for input fields */
 .login-container input[type="email"]:focus,
 .login-container input[type="password"]:focus {
     border-color: #2196f3;
@@ -61,14 +56,12 @@ body {
     outline: none;
 }
 
-/* Button container to place buttons next to each other */
 .button-group {
     display: flex;
     justify-content: space-between;
     gap: 10px; 
 }
 
-/* Button styles for both Login and Register */
 .login-container button {
     flex: 1;
     padding: 15px;
@@ -85,17 +78,14 @@ body {
     margin-right: 10px; 
 }
 
-/* Remove margin from the last button */
 .button-group button:last-child {
     margin-right: 0;
 }
 
-/* Material icon on the button */
 .login-container button .material-icons {
     margin-right: 8px;
 }
 
-/* Login Button */
 .login-btn {
     background-color: #2196f3; 
 }
@@ -105,7 +95,6 @@ body {
     box-shadow: 0 8px 16px rgba(25, 118, 210, 0.3);
 }
 
-/* Register Button */
 .register-btn {
     background-color: #ff7043; 
 }
@@ -115,9 +104,8 @@ body {
     box-shadow: 0 8px 16px rgba(230, 74, 25, 0.3);
 }
 
-/* Forgot Password Button */
 .forgot-password-btn {
-    background-color: #368512; /* Orange color */
+    background-color: #368512; 
 }
 
 .forgot-password-btn:hover {
@@ -125,7 +113,6 @@ body {
     box-shadow: 0 8px 16px rgba(230, 74, 25, 0.3);
 }
 
-/* Messages styling */
 .messages {
     list-style-type: none;
     padding: 0;
@@ -168,7 +155,6 @@ body {
     }
 }
 
-
 /****************************************Register Page***************************************/
 .register-container {
     background-color: #fff;
@@ -179,7 +165,6 @@ body {
     max-width: 100%;
 }
 
-/* Input fields */
 .register-container input[type="email"],
 .register-container input[type="password"] {
     width: 100%;
@@ -192,7 +177,6 @@ body {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Fancy focus effect for input fields */
 .register-container input[type="email"]:focus,
 .register-container input[type="password"]:focus {
     border-color: #2196f3;
@@ -200,7 +184,6 @@ body {
     outline: none;
 }
 
-/* Register button */
 .registerbutton {
     width: 100%;
     padding: 15px;
@@ -237,10 +220,9 @@ body {
 }
 
 .gobackbutton:hover {
-    background-color: #c0392b; /* Darker red on hover */
+    background-color: #c0392b; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 
 /* Responsive styling */
 @media only screen and (max-width: 768px) {
@@ -299,11 +281,9 @@ body {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-
 .forgot-password-container .forgot-password-btn .material-icons {
     margin-right: 8px;
 }
-
 
 .forgot-password-container .forgot-password-btn:hover {
     background-color: #e64a19;
@@ -351,7 +331,6 @@ body {
         font-size: 14px;
     }
 }
-
 
 /*************************** Reset Password Page ********************************/
 .reset-password-container {

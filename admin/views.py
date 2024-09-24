@@ -10,10 +10,9 @@ from django.core.exceptions import ValidationError
 # Display all users
 def get_userlist(request):
     if 'user_id' not in request.session:
-        return redirect('/user/login')  # Redirect to the login page if not logged in
+        return redirect('/user/login')  
     
     users = user_collection.find({}, {'email': 1, 'is_admin': 1, 'is_superuser': 1, 'last_login': 1})
-    
     # Convert MongoDB cursor to list for rendering in template
     user_list = []
     for user in users:
@@ -33,7 +32,6 @@ def delete_user(request, user_id):
     if request.method=='POST':
         user_collection.delete_one({'_id': ObjectId(user_id)})
         return redirect('userlist')
-# Function to hash the password (assuming you're using bcrypt)
 def hash_password(password):
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     
@@ -50,9 +48,8 @@ def update_user(request, user_id):
             if not user:
                 return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
 
-            # Update the password if provided
+            #Update the password if provided
             #Validate password match
-        
             if data.get('password'):
                 print(password)
                 print(confirm_password)
@@ -78,7 +75,6 @@ def update_user(request, user_id):
                     }
                 }
             )
-
             return JsonResponse({'status': 'success', 'message': 'User updated successfully'})
 
         except Exception as e:

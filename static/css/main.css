@@ -11,12 +11,14 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    background-color: #264653; /* Dark Blue */
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #264653; 
     color: white;
+    width: 100vw;
+    max-width: 100vw;
 }
 
-/* Title and Home button on the left */
 .nav-left {
     display: flex;
     align-items: center;
@@ -37,30 +39,29 @@ body {
 }
 
 .nav-link:hover {
-    color: #e9c46a; /* Light Yellow */
+    color: #e9c46a; 
 }
 
-/* Register and Logout buttons on the right */
 .nav-right {
     display: flex;
     align-items: center;
 }
 
 .nav-btn {
-    background-color: #e76f51; /* Coral Color */
+    background-color: #e76f51; 
     border: none;
     color: white;
     padding: 10px 20px;
     font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
-    margin-left: 10px;
+    margin-left: 20px;
     margin-right: 20px;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .nav-btn:hover {
-    background-color: #f4a261; /* Lighter Coral */
+    background-color: #f4a261; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -71,13 +72,20 @@ body {
 /* Footer styling */
 footer {
     text-align: center;
-    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     background-color: #264653;
     color: white;
     position: absolute;
     bottom: 0;
-    width: 100%;
+    width: 100vw !important;
+    max-width: 100vw;
 }
+header {
+    width: 100vw !important;
+    max-width: 100vw;
+}
+
 
 /* Responsive Styling */
 @media (max-width: 768px) {

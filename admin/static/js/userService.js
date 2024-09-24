@@ -1,37 +1,16 @@
-const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
-
-// const deleteUser = (userId) => {
-//   fetch(`/admin/delete_user/${userId}/`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//       "X-CSRFToken": csrfToken
-//     },
-//   })
-//     .then((response) => {
-//       if (response.ok) {
-//         document.getElementById(`${userId}`).remove();
-//       } else {
-//         alert("Failed to delete user");
-//       }
-//     })
-//     .catch((error) => console.error("Error: ", error));
-// };
-
-let userIdToDelete = null; // Store the user ID for deletion
-
 // Function to show the delete confirmation modal
+let userIdToDelete = null; 
 const showDeleteModal = (userId) => {
-  userIdToDelete = userId; // Store the user ID to delete
+  userIdToDelete = userId; 
   const modal = document.getElementById('deleteModal');
-  modal.style.display = 'block'; // Show the modal
+  modal.style.display = 'block'; 
 };
 
 // Function to close the delete confirmation modal
 const closeDeleteModal = () => {
   const modal = document.getElementById('deleteModal');
-  modal.style.display = 'none'; // Hide the modal
-  userIdToDelete = null; // Reset the user ID
+  modal.style.display = 'none'; 
+  userIdToDelete = null; 
 };
 
 // Function to confirm deletion and send the request
@@ -46,8 +25,8 @@ const confirmDelete = () => {
     })
       .then((response) => {
         if (response.ok) {
-          document.getElementById(userIdToDelete).remove(); // Remove the user row from the table
-          closeDeleteModal(); // Close the modal
+          document.getElementById(userIdToDelete).remove(); 
+          closeDeleteModal(); 
         } else {
           alert("Failed to delete user");
         }
@@ -64,7 +43,6 @@ window.onclick = function (event) {
   }
 };
 
-
 // Function to show the update modal
 const showUpdateModal = (user) => {
   document.getElementById('update_user_id').value = user.id;
@@ -73,7 +51,7 @@ const showUpdateModal = (user) => {
   document.getElementById('update_is_admin').checked = (user.is_admin === 'True');
   document.getElementById('update_is_superuser').checked = (user.is_superuser === 'True');
 
-  // Show the modal
+// Show the modal
   const modal = document.getElementById('updateModal');
   modal.style.display = 'block';
 };
@@ -92,7 +70,6 @@ const submitUpdate = () => {
   const isAdmin = document.getElementById('update_is_admin').checked;
   const isSuperuser = document.getElementById('update_is_superuser').checked;
 
-  // Send request to update the student
   fetch(`/admin/update_user/${userId}/`, {
     method: "POST",
     headers: {
@@ -113,7 +90,6 @@ const submitUpdate = () => {
       closeUpdateModal();
       location.reload();
     } else {
-      // Display error messages
       document.getElementById('error_message').innerText = data.message;
     }
   })

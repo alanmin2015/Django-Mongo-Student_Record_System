@@ -1,21 +1,21 @@
 from django.shortcuts import render, redirect
-from .models import user_collection
-from .utils import hash_password, verify_password
 from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-
 from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_str
-
 from django.urls import reverse
-from bson import ObjectId
 
 from datetime import datetime
+from bson import ObjectId
+
+from .models import user_collection
+from .utils import hash_password, verify_password
+
 
 # User registration 
 def register(request):
@@ -67,7 +67,6 @@ def login_view(request):
         # Find the user in MongoDB
         user = user_collection.find_one({'email': email})
         if user and verify_password(password, user['password']):
-            # Django's login mechanism doesn't handle PyMongo, so you can use sessions manually
             request.session['user_id'] = str(user['_id'])
             request.session['email'] = user['email']
             request.session['is_admin'] = user.get('is_admin', False)
@@ -95,10 +94,10 @@ def login_view(request):
 
 # Logout View
 def logout_view(request):
-    request.session.flush() # This will clear the session
+    request.session.flush() 
     return JsonResponse({'message': 'Successfully logged out'}, status=200)
 
-# Create a mock user class to mimic Django's User model as we are using MongoDB
+# Create a mock user class to mimic Django's User model as it uses MongoDB
 class MockUser:
     def __init__(self, user_data):
         self.id = str(user_data['_id'])  
@@ -119,7 +118,6 @@ def forgot_password(request):
     if request.method == 'POST':
         email = request.POST['email']
 
-        # Check if the user exists in MongoDB
         user_data = user_collection.find_one({'email': email})
         if not user_data:
             messages.error(request, 'No user found with this email address.')
@@ -159,7 +157,7 @@ def reset_password(request, uidb64, token):
     except (TypeError, ValueError, OverflowError, user_collection.DoesNotExist):
         user_data = None
 
-    # Create a mock user instance for token verification
+    # Create a mock user
     if user_data:
         user = MockUser(user_data)
     else:
@@ -175,7 +173,6 @@ def reset_password(request, uidb64, token):
                 messages.error(request, 'Passwords do not match.')
                 return render(request, 'resetPassword.html', {'uidb64': uidb64, 'token': token})
 
-            # Validate the new password
             try:
                 validate_password(new_password)
             except ValidationError as e:
@@ -183,7 +180,6 @@ def reset_password(request, uidb64, token):
                     messages.error(request, error)
                 return render(request, 'resetPassword.html', {'uidb64': uidb64, 'token': token})
 
-            # Hash the new password and update it in MongoDB
             hashed_password = hash_password(new_password)
             user_collection.update_one(
                 {'_id': ObjectId(uid)},

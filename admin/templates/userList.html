@@ -10,6 +10,7 @@
 {% block content %}
 {% csrf_token %}
     <div class="user-list-container">
+        <div class="table-responsive">
         <h1>List of Users</h1>
         <ul>
             <table>
@@ -47,6 +48,7 @@
         </ul>
         {% include 'userUpdateModal.html' %}
         {% include 'userDeleteModal.html' %}
+        </div>
     </div>
 
 {% endblock %}

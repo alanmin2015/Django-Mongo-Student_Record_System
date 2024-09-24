@@ -1,4 +1,3 @@
-import json
 import datetime
 import random
 from django.http import JsonResponse
@@ -7,7 +6,9 @@ import gridfs
 from .models import student_collection
 from bson import ObjectId
 from db_connection import db
-#Function to generate the student ID based on current date and a random 3-digit number
+from django.contrib import messages
+
+#Generate the studentID based on current date and a random 3-digit number
 def generate_student_id():
     today_date_str=datetime.datetime.now().strftime("%y%m%d")
 
@@ -21,8 +22,8 @@ def generate_unique_student_id():
         student_id = generate_student_id()
         # Check if this ID already exists in the collection
         if not student_collection.find_one({'_id': student_id}):
-            return student_id  # Return if the ID is unique
-
+            return student_id  
+        
 # Add a student
 def add_student(request):
     if request.method == 'POST':
@@ -32,10 +33,8 @@ def add_student(request):
         grade=request.POST.get('grade')
         score=request.POST.get('score')
 
-        #Generate the student ID
         student_id=generate_unique_student_id()
 
-        # Add to MongoDB
         records = {
             "_id": student_id,
             "first_name": first_name,
@@ -53,15 +52,11 @@ def add_student(request):
 # Search for a student by ID
 def get_student_by_id(request, student_id):
     if request.method == 'GET':
-        # Fetch student from the database
         student = student_collection.find_one({'_id': student_id})
-        
         if student:
-            # Convert MongoDB ObjectId to string and return student data
-            student['_id'] = str(student['_id'])
-        if 'photo' in student and isinstance(student['photo'], ObjectId):
-            student['photo'] = str(student['photo'])
-
+            if 'photo' in student and isinstance(student['photo'], ObjectId):
+                student['photo'] = str(student['photo'])
+            print('student',student)
             return JsonResponse({'status': 'success', 'student': student})
         else:
             return JsonResponse({'status': 'error', 'message': 'Student not found'}, status=404)
@@ -71,14 +66,14 @@ def get_student_by_id(request, student_id):
 # Display all students
 def get_all_student(request):
     if 'user_id' not in request.session:
-        return redirect('/user/login')  # Redirect to the login page if not logged in
+        return redirect('/user/login') 
     
     students = student_collection.find()
     
     # Convert MongoDB cursor to list for rendering in template
     student_list = []
     for student in students:
-        student['id'] = str(student['_id'])  # Convert ObjectId to string
+        student['id'] = str(student['_id']) 
         student_list.append(student)
     
     return render(request, 'studentList.html', {'students': student_list})
@@ -92,7 +87,6 @@ def delete_student(request, student_id):
     
 # Update a student
 def update_student(request, student_id):
-
     if request.method=='POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -108,27 +102,25 @@ def update_student(request, student_id):
             'score':score,
             }
 
-        print('student_data',student_data)
     #Upload photo
-    if 'photo' in request.FILES:
-        fs = gridfs.GridFS(db)
-        photo=request.FILES['photo']
-        photo_id=fs.put(photo, filename=photo.name)
-
-        student_data['photo']=photo_id
+        if 'photo' in request.FILES:
+            fs = gridfs.GridFS(db)
+            photo=request.FILES['photo']
+            photo_id=fs.put(photo, filename=photo.name)
+            student_data['photo']=photo_id
 
         student_collection.update_one(
         {'_id': student_id},
         {'$set':student_data}
         )
-        
+        messages.success(request, 'Update successful.')
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
 
 def student_detail(request,student_id):
     student=student_collection.find_one({'_id': student_id})
-
     if student:
+        student['id'] = str(student['_id'])
         if 'photo' in student and isinstance(student['photo'], ObjectId):
             student['photo']=str(student['photo'])
         
