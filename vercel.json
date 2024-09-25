@@ -1,8 +1,7 @@
 {
-    "version": 2,
     "builds": [
       {
-        "src": "manage.py",
+        "src": "studentrecordsystem/wsgi.py",
         "use": "@vercel/python",
         "config": {
           "maxLambdaSize": "50mb"
@@ -20,12 +19,8 @@
       },
       {
         "src": "/(.*)",
-        "dest": "/manage.py"
+        "dest": "studentrecordsystem/wsgi.pyy"
       }
-    ],
-    "env": {
-      "DJANGO_SETTINGS_MODULE": "studentrecordsystem.settings",
-      "PYTHONUNBUFFERED": "1"
-    }
+    ]
   }
   
