@@ -4,7 +4,7 @@ from .models import user_collection
 from django.http import JsonResponse
 import bcrypt
 import json
-from django.contrib import messages
+from students.models import student_collection
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 # Display all users
@@ -14,6 +14,10 @@ def get_userlist(request):
     
     users = user_collection.find({}, {'email': 1, 'is_admin': 1, 'is_superuser': 1, 'last_login': 1})
     user_id = request.session.get('user_id')
+    students = list(student_collection.find())
+    for student in students:
+        student['id'] = str(student['_id']) 
+        
     # Convert MongoDB cursor to list for rendering in template
     user_list = []
     for user in users:
@@ -26,7 +30,7 @@ def get_userlist(request):
         }
         user_list.append(user_data)
 
-    return render(request, 'userList.html', {'users': user_list,'user_id': user_id})
+    return render(request, 'admin.html', {'users': user_list,'user_id': user_id, 'students': students})
 
 # Delete a user
 def delete_user(request, user_id):

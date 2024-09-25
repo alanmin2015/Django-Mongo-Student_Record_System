@@ -84,7 +84,7 @@ def login_view(request):
 
             #Different user account will direct to different page
             if user.get('is_superuser',False):
-                return redirect('/admin/userlist')
+                return redirect('/admin')
             else:
                 return redirect('/home/get_all_student')
         else:

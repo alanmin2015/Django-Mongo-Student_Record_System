@@ -31,7 +31,7 @@
         <div class="button-container">
             <button class="back-button" onclick="location.href='/home/get_all_student/'">Back</button>
             {% if request.session.is_admin or request.session.is_superuser %}
-            <button class="update-button" onclick="showUpdateModal('{{ student.id }}')">Update</button>
+            <button class="update-button" onclick="showStudentUpdateModal('{{ student.id }}')">Update</button>
             {% endif %}
         </div>
         {% if messages %}

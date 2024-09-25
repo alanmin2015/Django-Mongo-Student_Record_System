@@ -1,6 +1,6 @@
 <div id="updateModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeUpdateModal()">&times;</span>
+        <span class="close" onclick="closeStudentUpdateModal()">&times;</span>
         <h2>Update Student</h2>
         <form id="updateForm" enctype="multipart/form-data">
             {% csrf_token %}
@@ -33,7 +33,7 @@
             <label for="update_photo">Upload Photo:</label>
             <input type="file" id="update_photo" name="photo"><br><br>
 
-            <button type="button" onclick="submitUpdate()">Update Student</button>
+            <button type="button" onclick="submitStudentUpdate()">Update Student</button>
         </form>
     </div>
 </div>

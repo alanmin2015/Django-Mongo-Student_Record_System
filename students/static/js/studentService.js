@@ -26,7 +26,7 @@ const searchStudentById = (studentId, callback) => {
 };
 
 // Show the update modal
-const showUpdateModal = (student) => {
+const showStudentUpdateModal = (student) => {
   searchStudentById(student, (student) => {
     // Show the modal
     const modal = document.getElementById("updateModal");
@@ -42,13 +42,13 @@ const showUpdateModal = (student) => {
 };
 
 // Close the modal
-const closeUpdateModal = () => {
+const closeStudentUpdateModal = () => {
   const modal = document.getElementById("updateModal");
   modal.style.display = "none";
 };
 
 // Submit the updated student info
-const submitUpdate = () => {
+const submitStudentUpdate = () => {
   const formData = new FormData(document.getElementById("updateForm"));
 
   fetch(`/home/update_student/${formData.get("student_id")}/`, {
@@ -60,8 +60,8 @@ const submitUpdate = () => {
   })
     .then((response) => {
       if (response.ok) {
-        closeUpdateModal();
-        showToastMessage('Update Success!'); 
+        closeStudentUpdateModal();
+        showStudentToastMessage('Update Success!'); 
         setTimeout(() => {
           location.reload(); 
         }, 2000)
@@ -108,21 +108,21 @@ window.onclick = function (event) {
 
 // Show the delete confirmation modal
 let studentIdToDelete = null; 
-const showDeleteModal = (studentId) => {
+const showStudentDeleteModal = (studentId) => {
   studentIdToDelete = studentId; 
   const modal = document.getElementById('deleteModal');
   modal.style.display = 'block';
 };
 
 // Close the delete confirmation modal
-const closeDeleteModal = () => {
+const closeStudentDeleteModal = () => {
   const modal = document.getElementById('deleteModal');
   modal.style.display = 'none'; 
   studentIdToDelete = null; 
 };
 
 
-const confirmDelete = (studentId) => {
+const confirmStudentDelete = (studentId) => {
 
   fetch(`/home/delete_student/${studentId}/`, {
     method: "POST",
@@ -143,7 +143,7 @@ const confirmDelete = (studentId) => {
 
 
 // Function to show the toast
-function showToastMessage(message) {
+function showStudentToastMessage(message) {
   const toastModal = document.getElementById('toastModal');
   const toastMessage = document.getElementById('toastMessage');
   toastMessage.innerText = message;

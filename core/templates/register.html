@@ -50,7 +50,7 @@
         <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
     
         {% if request.session.is_superuser %}
-        <button type="button" class="gobackbutton" onclick="location.href='/admin/userlist/'">Go Back</button>
+        <button type="button" class="gobackbutton" onclick="location.href='/admin/'">Go Back</button>
         {% endif %}
     </div>
 </body>

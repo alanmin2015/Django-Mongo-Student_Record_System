@@ -21,7 +21,7 @@
                 <span class="site-title">Alan's Academy</span>
                 <a href="/home/get_all_student/" class="nav-link">Home</a>
                 {% if request.session.is_superuser %}
-                <a href="/admin/userlist/" class="nav-link">Admin</a>
+                <a href="/admin/" class="nav-link">Admin</a>
                 {% endif %}
             </div>
             <div class="nav-right">
@@ -31,11 +31,12 @@
         </nav>
     </header>
 
-
+    <div class="content-wrapper">
     <main>
         {% block content %}{% endblock %}
     </main>
-
+</div>
+</div>
 
     <footer>
         <p>&copy; 2024 Alan's Academy Website</p>

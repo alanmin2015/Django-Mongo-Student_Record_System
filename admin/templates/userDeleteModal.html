@@ -1,14 +1,14 @@
 <div id="deleteModal" class="modal">
     <div class="modal-content">
-      <span onclick="closeDeleteModal()" class="close">&times;</span>
+      <span onclick="closeUserDeleteModal()" class="close">&times;</span>
       <h2>Confirm Deletion</h2>
       <p>Are you sure you want to delete this user?</p>
       
       <input type="hidden" id="delete_user_id">
       
       <div class="button-container">
-        <button type="button"  class="deleteButton" onclick="confirmDelete()">Confirm</button>
-        <button type="button" class="cancelButton" onclick="closeDeleteModal()">Cancel</button>
+        <button type="button"  class="deleteButton" onclick="confirmUserDelete()">Confirm</button>
+        <button type="button" class="cancelButton" onclick="closeUserDeleteModal()">Cancel</button>
       </div>
     </div>
   </div>

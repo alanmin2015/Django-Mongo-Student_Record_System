@@ -1,0 +1,154 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block extra_head %}
+<meta name="csrf-token" content="{{ csrf_token }}" />
+<link rel="stylesheet" href="{% static 'css/admin.css' %}" />
+<link rel="stylesheet" href="{% static 'css/student.css' %}" />
+<script>
+  let loggedInUserId = "{{ request.session.user_id }}";
+</script>
+{% endblock %} {% block content %} {% csrf_token %}
+<div class="main-container">
+  <div class="model-list">
+    <h2>Model</h2>
+    <ul>
+      <li><a href="javascript:void(0);" onclick="showUserTable()">Users</a></li>
+      <li>
+        <a href="javascript:void(0);" onclick="showStudentTable()">Students</a>
+      </li>
+    </ul>
+  </div>
+
+  <div
+    class="user-list-container"
+    id="userTableContainer"
+    data-user-id="{{ request.session.user_id }}"
+  >
+    <div class="table-responsive">
+      <h1>List of Users</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Is Admin</th>
+            <th>Is Superuser</th>
+            <th>Last Login</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr id="{{ user.id }}">
+            <td>{{ user.email }}</td>
+            <td>{{ user.is_admin }}</td>
+            <td>{{ user.is_superuser }}</td>
+            <td>{{ user.last_login }}</td>
+            {% if request.session.is_superuser %}
+            <td>
+              <button onclick="showUserDeleteModal('{{user.id}}')">
+                Delete
+              </button>
+              <button
+                onclick="showUserUpdateModal({
+                                id: '{{ user.id }}',
+                                email: '{{ user.email }}',
+                                is_admin: '{{ user.is_admin }}',
+                                is_superuser: '{{ user.is_superuser }}'
+                            })"
+              >
+                Update
+              </button>
+            </td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="studentTableContainer" class="student-list-container" style="display: none">
+    <div class="header-with-button">
+      <h1>List of Students</h1>
+      {% if request.session.is_admin or request.session.is_superuser %}
+      <button class="addStudentButton" onclick="showAddStudentModal()">
+        Add Student
+      </button>
+      {% endif %}
+    </div>
+    <div class="table-responsive">
+      <table id="studentTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable(0, 'int')">
+              Student ID<span class="sort-icon asc">▲</span
+              ><span class="sort-icon desc">▼</span>
+            </th>
+            <th onclick="sortTable(1, 'string')">
+              First Name<span class="sort-icon asc">▲</span
+              ><span class="sort-icon desc">▼</span>
+            </th>
+            <th onclick="sortTable(2, 'string')">
+              Last Name<span class="sort-icon asc">▲</span
+              ><span class="sort-icon desc">▼</span>
+            </th>
+            <th onclick="sortTable(3, 'string')">
+              Gender<span class="sort-icon asc">▲</span
+              ><span class="sort-icon desc">▼</span>
+            </th>
+            <th onclick="sortTable(4, 'int')">
+              Grade<span class="sort-icon asc">▲</span
+              ><span class="sort-icon desc">▼</span>
+            </th>
+            <th onclick="sortTable(5, 'float')">
+              Score<span class="sort-icon asc">▲</span
+              ><span class="sort-icon desc">▼</span>
+            </th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students %}
+          <tr id="{{ student.id }}">
+            <td>{{ student.id }}</td>
+            <td>{{ student.first_name }}</td>
+            <td>{{ student.last_name }}</td>
+            <td>{{ student.gender }}</td>
+            <td>{{ student.grade }}</td>
+            <td>{{ student.score }}</td>
+
+            <td>
+              {% if request.session.is_admin or request.session.is_superuser %}
+              <button onclick="showStudentDeleteModal('{{ student.id }}')">
+                Delete
+              </button>
+              <button onclick="showStudentUpdateModal('{{ student.id }}')">
+                Update
+              </button>
+              {% endif %}
+              <button onclick="viewStudentDetail('{{ student.id }}')">
+                Detail
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div id="pagination-controls" class="pagination-controls"></div>
+    </div>
+  </div>
+</div>
+
+{% include 'addStudentModal.html' %} 
+{% include 'updateStudentModal.html' %} 
+{%include 'deleteStudentModal.html' %} 
+{% include 'userUpdateModal.html' %} 
+{% include 'userDeleteModal.html' %}
+{% include 'toast.html' %} 
+{% endblock %} 
+
+{%block extra_js %}
+<script src="{% static 'js/adminService.js' %}"></script>
+<script src="{% static 'js/studentService.js' %}"></script>
+<script src="{% static 'js/tableUtil.js' %}"></script>
+{% endblock %}

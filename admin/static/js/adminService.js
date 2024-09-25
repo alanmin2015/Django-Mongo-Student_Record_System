@@ -1,13 +1,13 @@
 // Function to show the delete confirmation modal
 let userIdToDelete = null; 
-const showDeleteModal = (userId) => {
+const showUserDeleteModal = (userId) => {
   userIdToDelete = userId; 
   const modal = document.getElementById('deleteModal');
   modal.style.display = 'block'; 
 };
 
 // Function to close the delete confirmation modal
-const closeDeleteModal = () => {
+const closeUserDeleteModal = () => {
   const modal = document.getElementById('deleteModal');
   modal.style.display = 'none'; 
   userIdToDelete = null; 
@@ -16,10 +16,10 @@ const closeDeleteModal = () => {
 // Function to confirm deletion and send the request
 const userContainer = document.querySelector('.user-list-container');
 loggedInUserId = userContainer.getAttribute('data-user-id');
-const confirmDelete = () => {
+const confirmUserDelete = () => {
   if (userIdToDelete) {
     if(userIdToDelete==loggedInUserId){
-      showToastMessage("You cannot delete your own account")
+      showUserToastMessage("You cannot delete your own account")
       return;
     }
     fetch(`/admin/delete_user/${userIdToDelete}/`, {
@@ -32,8 +32,8 @@ const confirmDelete = () => {
       .then((response) => {
         if (response.ok) {
           document.getElementById(userIdToDelete).remove(); 
-          closeDeleteModal(); 
-          showToastMessage('Delete Success!'); 
+          closeUserDeleteModal(); 
+          showUserToastMessage('Delete Success!'); 
         } else {
           alert("Failed to delete user");
         }
@@ -46,12 +46,12 @@ const confirmDelete = () => {
 window.onclick = function (event) {
   const modal = document.getElementById("deleteModal");
   if (event.target === modal) {
-    closeDeleteModal();
+    closeUserDeleteModal();
   }
 };
 
 // Function to show the update modal
-const showUpdateModal = (user) => {
+const showUserUpdateModal = (user) => {
   document.getElementById('update_user_id').value = user.id;
   document.getElementById('update_email').innerText = user.email;
   document.getElementById('update_password').value = '';
@@ -64,13 +64,13 @@ const showUpdateModal = (user) => {
 };
 
 // Function to close the modal
-const closeUpdateModal = () => {
+const closeUserUpdateModal = () => {
   const modal = document.getElementById("updateModal");
   modal.style.display = "none";
 };
 
 // Function to submit the updated student info
-const submitUpdate = () => {
+const submitUserUpdate = () => {
   const userId = document.getElementById('update_user_id').value;
   const password = document.getElementById('update_password').value;
   const confirm_password = document.getElementById('confirm_password').value;
@@ -93,8 +93,8 @@ const submitUpdate = () => {
   .then(response => response.json())
   .then((data) => {
     if (data.status === 'success') {
-      closeUpdateModal();
-      showToastMessage('Update Success!'); 
+      closeUserUpdateModal();
+      showUserToastMessage('Update Success!'); 
       setTimeout(() => {
         location.reload(); 
       }, 2000)
@@ -106,7 +106,7 @@ const submitUpdate = () => {
 };
 
 // Function to show the toast
-function showToastMessage(message) {
+function showUserToastMessage(message) {
   const toastModal = document.getElementById('toastModal');
   const toastMessage = document.getElementById('toastMessage');
   toastMessage.innerText = message;
@@ -125,6 +125,35 @@ window.onclick = function (event) {
   }
 };
 
+// Function to show the User Table and hide the Student Table
+document.addEventListener('DOMContentLoaded', function() {
+  function showUserTable() {
+      const userTable = document.getElementById('userTableContainer');
+      const studentTable = document.getElementById('studentTableContainer');
+
+      if (userTable && studentTable) {
+          userTable.style.display = 'block';
+          studentTable.style.display = 'none';
+      } else {
+          console.error('Error: Table elements not found in the DOM');
+      }
+  }
+
+  // Function to show the Student Table and hide the User Table
+  function showStudentTable() {
+      const studentTable = document.getElementById('studentTableContainer');
+      const userTable = document.getElementById('userTableContainer');
+      if (studentTable && userTable) {
+          studentTable.style.display = 'block';
+          userTable.style.display = 'none';
+      } else {
+          console.error('Error: Table elements not found in the DOM');
+      }
+  }
+
+  window.showUserTable = showUserTable;
+  window.showStudentTable = showStudentTable;
+});
 
 
 

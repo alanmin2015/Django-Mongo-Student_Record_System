@@ -1,66 +1,86 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% load static %} {% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/student.css' %}" />
+<meta name="csrf-token" content="{{ csrf_token }}" />
+<script src="{% static 'js/studentService.js' %}" defer></script>
+{% endblock %} {% block content %}
+<div class="student-list-container">
+  <div class="table-responsive">
+    <div class="header-with-button">
+      <h1>List of Students</h1>
+      {% if request.session.is_admin or request.session.is_superuser %}
+      <button class="addStudentButton" onclick="showAddStudentModal()">
+        Add Student
+      </button>
+      {% endif %}
+    </div>
 
-{% load static %}
+    <table id="studentTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0, 'int')">
+            Student ID<span class="sort-icon asc">▲</span
+            ><span class="sort-icon desc">▼</span>
+          </th>
+          <th onclick="sortTable(1, 'string')">
+            First Name<span class="sort-icon asc">▲</span
+            ><span class="sort-icon desc">▼</span>
+          </th>
+          <th onclick="sortTable(2, 'string')">
+            Last Name<span class="sort-icon asc">▲</span
+            ><span class="sort-icon desc">▼</span>
+          </th>
+          <th onclick="sortTable(3, 'string')">
+            Gender<span class="sort-icon asc">▲</span
+            ><span class="sort-icon desc">▼</span>
+          </th>
+          <th onclick="sortTable(4, 'int')">
+            Grade<span class="sort-icon asc">▲</span
+            ><span class="sort-icon desc">▼</span>
+          </th>
+          <th onclick="sortTable(5, 'float')">
+            Score<span class="sort-icon asc">▲</span
+            ><span class="sort-icon desc">▼</span>
+          </th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+        <tr id="{{ student.id }}">
+          <td>{{ student.id }}</td>
+          <td>{{ student.first_name }}</td>
+          <td>{{ student.last_name }}</td>
+          <td>{{ student.gender }}</td>
+          <td>{{ student.grade }}</td>
+          <td>{{ student.score }}</td>
 
-{% block extra_head %}
-    <link rel="stylesheet" href="{% static 'css/student.css' %}">
-    <meta name="csrf-token" content="{{ csrf_token }}">
-    <script src="{% static 'js/studentService.js' %}" defer></script>
-{% endblock %}
-
-{% block content %}
-    <div class="student-list-container">
-        <div class="table-responsive">
-        <div class="header-with-button">
-            <h1>List of Students</h1>
+          <td>
             {% if request.session.is_admin or request.session.is_superuser %}
-            <button class="addStudentButton" onclick="showAddStudentModal()">Add Student</button>
+            <button onclick="showStudentDeleteModal('{{ student.id }}')">
+              Delete
+            </button>
+            <button onclick="showStudentUpdateModal('{{ student.id }}')">
+              Update
+            </button>
             {% endif %}
-        </div>
+            <button onclick="viewStudentDetail('{{ student.id }}')">
+              Detail
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div id="pagination-controls" class="pagination-controls"></div>
+  </div>
+</div>
 
-        <table id="studentTable">
-            <thead>
-                <tr>
-                    <th onclick="sortTable(0, 'int')">Student ID<span class="sort-icon asc">▲</span><span class="sort-icon desc">▼</span></th>
-                    <th onclick="sortTable(1, 'string')">First Name<span class="sort-icon asc">▲</span><span class="sort-icon desc">▼</span></th>
-                    <th onclick="sortTable(2, 'string')">Last Name<span class="sort-icon asc">▲</span><span class="sort-icon desc">▼</span></th>
-                    <th onclick="sortTable(3, 'string')">Gender<span class="sort-icon asc">▲</span><span class="sort-icon desc">▼</span></th>
-                    <th onclick="sortTable(4, 'int')">Grade<span class="sort-icon asc">▲</span><span class="sort-icon desc">▼</span></th>
-                    <th onclick="sortTable(5, 'float')">Score<span class="sort-icon asc">▲</span><span class="sort-icon desc">▼</span></th>        
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for student in students %}
-                <tr id="{{ student.id }}">
-                    <td>{{ student.id }}</td>
-                    <td>{{ student.first_name }}</td>
-                    <td>{{ student.last_name }}</td>
-                    <td>{{ student.gender }}</td>
-                    <td>{{ student.grade }}</td>
-                    <td>{{ student.score }}</td>
-    
-    <td>                {% if request.session.is_admin or request.session.is_superuser %}
-                        <button onclick="showDeleteModal('{{ student.id }}')">Delete</button>
-                        <button onclick="showUpdateModal('{{ student.id }}')">Update</button>
-                        {% endif %}
-                        <button onclick="viewStudentDetail('{{ student.id }}')">Detail</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div id="pagination-controls" class="pagination-controls"></div>
-        </div>
-        </div>
-
-    {% include 'addStudentModal.html' %} 
-    {% include 'updateStudentModal.html' %}
-    {% include 'deleteStudentModal.html' %}
-    {% include 'toast.html' %}
+{% include 'addStudentModal.html' %} 
+{% include 'updateStudentModal.html' %} 
+{%include 'deleteStudentModal.html' %} 
+{% include 'toast.html' %} 
 {% endblock %}
-
 {% block extra_js %}
-    <script src="{% static 'js/studentService.js' %}"></script>
-    <script src="{% static 'js/tableUtil.js' %}"></script>
+<script src="{% static 'js/studentService.js' %}"></script>
+<script src="{% static 'js/tableUtil.js' %}"></script>
 {% endblock %}
