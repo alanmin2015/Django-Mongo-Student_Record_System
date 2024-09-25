@@ -1,6 +1,6 @@
 import pymongo
 
-url='mongodb://localhost:27017'
+url='mongodb+srv://AlanMin:651223734@studentrecordsystem.effid.mongodb.net/'
 client=pymongo.MongoClient(url)
 
 db=client['StudentRecordSystem']
