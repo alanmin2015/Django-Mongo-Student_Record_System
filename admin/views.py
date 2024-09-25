@@ -13,6 +13,7 @@ def get_userlist(request):
         return redirect('/user/login')  
     
     users = user_collection.find({}, {'email': 1, 'is_admin': 1, 'is_superuser': 1, 'last_login': 1})
+    user_id = request.session.get('user_id')
     # Convert MongoDB cursor to list for rendering in template
     user_list = []
     for user in users:
@@ -25,7 +26,7 @@ def get_userlist(request):
         }
         user_list.append(user_data)
 
-    return render(request, 'userList.html', {'users': user_list})
+    return render(request, 'userList.html', {'users': user_list,'user_id': user_id})
 
 # Delete a user
 def delete_user(request, user_id):

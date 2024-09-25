@@ -51,19 +51,13 @@
             </tbody>
         </table>
         <div id="pagination-controls" class="pagination-controls"></div>
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
         </div>
         </div>
 
     {% include 'addStudentModal.html' %} 
     {% include 'updateStudentModal.html' %}
     {% include 'deleteStudentModal.html' %}
+    {% include 'toast.html' %}
 {% endblock %}
 
 {% block extra_js %}

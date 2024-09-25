@@ -14,8 +14,14 @@ const closeDeleteModal = () => {
 };
 
 // Function to confirm deletion and send the request
+const userContainer = document.querySelector('.user-list-container');
+loggedInUserId = userContainer.getAttribute('data-user-id');
 const confirmDelete = () => {
   if (userIdToDelete) {
+    if(userIdToDelete==loggedInUserId){
+      showToastMessage("You cannot delete your own account")
+      return;
+    }
     fetch(`/admin/delete_user/${userIdToDelete}/`, {
       method: "POST",
       headers: {
@@ -27,6 +33,7 @@ const confirmDelete = () => {
         if (response.ok) {
           document.getElementById(userIdToDelete).remove(); 
           closeDeleteModal(); 
+          showToastMessage('Delete Success!'); 
         } else {
           alert("Failed to delete user");
         }
@@ -86,15 +93,29 @@ const submitUpdate = () => {
   .then(response => response.json())
   .then((data) => {
     if (data.status === 'success') {
-      alert('User updated successfully');
       closeUpdateModal();
-      location.reload();
+      showToastMessage('Update Success!'); 
+      setTimeout(() => {
+        location.reload(); 
+      }, 2000)
     } else {
       document.getElementById('error_message').innerText = data.message;
     }
   })
   .catch((error) => console.error("Error:", error));
 };
+
+// Function to show the toast
+function showToastMessage(message) {
+  const toastModal = document.getElementById('toastModal');
+  const toastMessage = document.getElementById('toastMessage');
+  toastMessage.innerText = message;
+  toastModal.style.display = 'block';
+  
+  setTimeout(() => {
+    toastModal.style.display = 'none';
+  }, 2000);
+}
 
 // Event listener to close the modal when clicking outside the modal content
 window.onclick = function (event) {

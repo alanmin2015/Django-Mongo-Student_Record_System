@@ -5,11 +5,14 @@
 {% block extra_head %}
     <meta name="csrf-token" content="{{ csrf_token }}">
     <link rel="stylesheet" href="{% static 'css/user.css' %}">
+    <script>
+        let loggedInUserId = "{{ request.session.user_id }}"; 
+    </script>
 {% endblock %}
 
 {% block content %}
 {% csrf_token %}
-    <div class="user-list-container">
+    <div class="user-list-container" data-user-id="{{ request.session.user_id }}">
         <div class="table-responsive">
         <h1>List of Users</h1>
         <ul>
@@ -46,8 +49,10 @@
                 </tbody>
             </table>
         </ul>
+
         {% include 'userUpdateModal.html' %}
         {% include 'userDeleteModal.html' %}
+        {% include 'toast.html' %}
         </div>
     </div>
 

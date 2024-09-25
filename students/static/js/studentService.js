@@ -61,7 +61,10 @@ const submitUpdate = () => {
     .then((response) => {
       if (response.ok) {
         closeUpdateModal();
-        location.reload();
+        showToastMessage('Update Success!'); 
+        setTimeout(() => {
+          location.reload(); 
+        }, 2000)
       } else {
         alert("Failed to update student.");
       }
@@ -139,3 +142,14 @@ const confirmDelete = (studentId) => {
 };
 
 
+// Function to show the toast
+function showToastMessage(message) {
+  const toastModal = document.getElementById('toastModal');
+  const toastMessage = document.getElementById('toastMessage');
+  toastMessage.innerText = message;
+  toastModal.style.display = 'block';
+  
+  setTimeout(() => {
+    toastModal.style.display = 'none';
+  }, 2000);
+}
