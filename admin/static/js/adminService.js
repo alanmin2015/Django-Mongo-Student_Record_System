@@ -2,13 +2,13 @@
 let userIdToDelete = null; 
 const showUserDeleteModal = (userId) => {
   userIdToDelete = userId; 
-  const modal = document.getElementById('deleteModal');
+  const modal = document.getElementById('deleteUserModal');
   modal.style.display = 'block'; 
 };
 
 // Function to close the delete confirmation modal
 const closeUserDeleteModal = () => {
-  const modal = document.getElementById('deleteModal');
+  const modal = document.getElementById('deleteUserModal');
   modal.style.display = 'none'; 
   userIdToDelete = null; 
 };
@@ -59,13 +59,13 @@ const showUserUpdateModal = (user) => {
   document.getElementById('update_is_superuser').checked = (user.is_superuser === 'True');
 
 // Show the modal
-  const modal = document.getElementById('updateModal');
+  const modal = document.getElementById('updateUserModal');
   modal.style.display = 'block';
 };
 
 // Function to close the modal
 const closeUserUpdateModal = () => {
-  const modal = document.getElementById("updateModal");
+  const modal = document.getElementById("updateUserModal");
   modal.style.display = "none";
 };
 
